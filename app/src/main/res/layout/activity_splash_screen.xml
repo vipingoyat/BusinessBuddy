@@ -29,12 +29,12 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="80dp"
-        android:fontFamily="@font/agbalumo"
+        android:layout_marginTop="76dp"
+        android:fontFamily="@font/aladin"
         android:gravity="center_vertical"
         android:text="Business Buddy"
         android:textColor="@color/white"
-        android:textSize="29sp"
+        android:textSize="39sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />

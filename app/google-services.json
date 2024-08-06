@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "962105368255",
+    "project_id": "businessbuddy-3cd73",
+    "storage_bucket": "businessbuddy-3cd73.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:962105368255:android:355232d950edb877b3700a",
+        "android_client_info": {
+          "package_name": "com.example.slipsync"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "962105368255-4gaj8l6mthui16tr74d80amjkr6i7dti.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.slipsync",
+            "certificate_hash": "a7b93af4d9b45fe1d5235f7de4b428347a1bbe8f"
+          }
+        },
+        {
+          "client_id": "962105368255-ssfo34b6kp5sv7u1j2bnc6g4fng9bgci.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAhU2pRJCXB0RAYujLmLpcBV12pSEGVlEg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "962105368255-ssfo34b6kp5sv7u1j2bnc6g4fng9bgci.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
