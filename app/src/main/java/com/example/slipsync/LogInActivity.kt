@@ -75,6 +75,7 @@ class LogInActivity : AppCompatActivity() {
 
         binding.donthavebutton.setOnClickListener {
             startActivity(Intent(this,SignUpActivity::class.java))
+            finish()
         }
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
