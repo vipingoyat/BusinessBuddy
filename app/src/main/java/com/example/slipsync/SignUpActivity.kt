@@ -22,7 +22,7 @@ import com.example.slipsync.model.UserData
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.firebase.auth.GoogleAuthProvider
 
-class SignUpActivity : AppCompatActivity() {
+class SignUpActivity : AppCompatActivity(){
     private lateinit var auth: FirebaseAuth
     private lateinit var database: DatabaseReference
     private lateinit var email:String
@@ -112,7 +112,7 @@ class SignUpActivity : AppCompatActivity() {
         val userId= FirebaseAuth.getInstance().currentUser!!.uid
 
         ///Save the data to the Firebase
-        database.child("user").child(userId).setValue(userData)
+        database.child("admin").child(userId).setValue(userData)
     }
 
     private val launcher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()){
