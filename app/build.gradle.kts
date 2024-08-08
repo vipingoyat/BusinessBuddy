@@ -41,11 +41,19 @@ android {
 }
 
 dependencies {
-
+    val nav_version = "2.7.7"
     ///Firebase
     implementation(platform("com.google.firebase:firebase-bom:33.1.2"))
     implementation ("com.google.android.gms:play-services-auth:21.2.0")
     implementation("com.google.firebase:firebase-analytics")
+
+
+
+    // Kotlin
+    implementation("androidx.navigation:navigation-fragment-ktx:$nav_version")
+    implementation("androidx.navigation:navigation-ui-ktx:$nav_version")
+
+
     
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)

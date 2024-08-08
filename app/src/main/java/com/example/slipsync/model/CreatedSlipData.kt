@@ -1,7 +1,7 @@
 package com.example.slipsync.model
 
 data class CreatedSlipData(
-    val key:String? = null,
+    val slipNumber:String? = null,
     val date:String?=null,
     val slipName:String?=null,
     val vehicleNo:String?=null,
