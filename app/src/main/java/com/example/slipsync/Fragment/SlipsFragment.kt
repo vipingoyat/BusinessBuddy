@@ -24,9 +24,11 @@ class SlipsFragment : Fragment() {
     private lateinit var userId: String
     private lateinit var createdSlipAdapter:CreatedSlipsAdpater
 
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
     }
+
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -41,8 +43,11 @@ class SlipsFragment : Fragment() {
         return binding.root
     }
 
+
     companion object {
     }
+
+
     private fun retrieveBuyHistory() {
         userId = auth.currentUser?.uid ?: ""
         val slipRef = database.reference.child("user").child(userId).child("CreatedSlips")
@@ -68,7 +73,7 @@ class SlipsFragment : Fragment() {
     }
 
 
-    private fun setPreviousBuyItemRecyclerView() {
+    private fun setPreviousBuyItemRecyclerView(){
         val SlipItemName = mutableListOf<String>()
         val SlipName = mutableListOf<String>()
         val SlipItemAmount = mutableListOf<String>()
@@ -86,6 +91,5 @@ class SlipsFragment : Fragment() {
             )
             rv.adapter= createdSlipAdapter
         }
-
     }
 }
