@@ -64,18 +64,18 @@ class SlipsFragment : Fragment() {
 
             override fun onCancelled(error: DatabaseError) {
             }
-
         })
-
     }
+
+
     private fun setPreviousBuyItemRecyclerView() {
         val SlipItemName = mutableListOf<String>()
         val SlipName = mutableListOf<String>()
         val SlipItemAmount = mutableListOf<String>()
         for (i in 0 until listOfOrderItem.size) {
-            listOfOrderItem[i].slipItem?.let { SlipItemName.add(it.toString()) }
-            listOfOrderItem[i].slipName?.let { SlipName.add(it.toString()) }
-            listOfOrderItem[i].slipAmount?.let { SlipItemAmount.add(it.toString()) }
+            listOfOrderItem[i].slipItem?.let { SlipItemName.add(it) }
+            listOfOrderItem[i].slipName?.let { SlipName.add(it) }
+            listOfOrderItem[i].slipAmount?.let { SlipItemAmount.add(it) }
             val rv = binding.slipsRecyclerView
             rv.layoutManager = LinearLayoutManager(requireContext())
             createdSlipAdapter = CreatedSlipsAdpater(
