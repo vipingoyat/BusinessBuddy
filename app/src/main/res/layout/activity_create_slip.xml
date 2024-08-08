@@ -46,13 +46,13 @@
             android:textSize="19sp" />
 
         <TextView
-            android:id="@+id/numberEditText"
+            android:id="@+id/numberText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:background="@android:color/transparent"
             android:ems="10"
-            android:text="108"
+            android:hint="1"
             android:textColor="@color/black"
             android:textSize="19dp" />
     </LinearLayout>
