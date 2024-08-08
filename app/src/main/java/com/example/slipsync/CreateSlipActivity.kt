@@ -7,6 +7,7 @@ import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import androidx.lifecycle.ReportFragment.Companion.reportFragment
 import com.example.slipsync.databinding.ActivityCreateSlipBinding
 import com.example.slipsync.model.CreatedSlipData
 import com.google.firebase.auth.FirebaseAuth
@@ -20,6 +21,7 @@ class CreateSlipActivity : AppCompatActivity() {
     }
 
     ///Slip item Details
+    private lateinit var slipNumber:String
     private lateinit var slipName:String
     private lateinit var slipDate:String
     private lateinit var vehicleNo:String
@@ -37,13 +39,21 @@ class CreateSlipActivity : AppCompatActivity() {
         enableEdgeToEdge()
         setContentView(binding.root)
 
+
+        //Initialization of Firebase
+        auth = FirebaseAuth.getInstance()
+
+        //Initialization of Firebase Database Instance
+        database = FirebaseDatabase.getInstance()
         binding.backButton.setOnClickListener {
             finish()
         }
 
 
+
         val myCalendar = Calendar.getInstance()
         updateLable(myCalendar)
+        updateNumber()
 
         val datePicker = DatePickerDialog.OnDateSetListener{
             view, year, month, dayOfMonth ->
@@ -52,22 +62,15 @@ class CreateSlipActivity : AppCompatActivity() {
             myCalendar.set(Calendar.DAY_OF_MONTH, dayOfMonth)
             updateLable(myCalendar)
         }
-
         binding.dateEditText.setOnClickListener {
             DatePickerDialog(this,datePicker,myCalendar.get(Calendar.YEAR), myCalendar.get(Calendar.MONTH),
                 myCalendar.get(Calendar.DAY_OF_MONTH)).show()
         }
 
 
-
-        //Initialization of Firebase
-        auth = FirebaseAuth.getInstance()
-
-        //Initialization of Firebase Database Instance
-        database = FirebaseDatabase.getInstance()
-
         binding.createSlipButton.setOnClickListener {
             //Get Data from Field
+            slipNumber = binding.numberText.text.toString().trim()
             slipName = binding.NameEditText.text.toString().trim()
             slipDate = binding.dateEditText.text.toString().trim()
             vehicleNo = binding.VehicleEditText.text.toString().trim()
@@ -93,33 +96,30 @@ class CreateSlipActivity : AppCompatActivity() {
     }
 
     private fun uploadData() {
+        val userId = auth.currentUser?.uid?:""
         //Get Reference to the database
-        val slipRef = database.getReference("createdSlips")
-
-        //Generate the Unique key for the slip generated
-        val newSlipKey = slipRef.push().key
-
+        val database = FirebaseDatabase.getInstance().reference
         val newItem = CreatedSlipData(
-            newSlipKey,
+            slipNumber = slipNumber,
             slipName = slipName,
             date = slipDate,
             vehicleNo = vehicleNo,
             slipItem = slipItem,
             slipQuantity = slipQuantity,
             slipAmount = slipAmount
-            )
-
-        newSlipKey?.let {
-                key->
-            slipRef.child(key).setValue(newItem).addOnSuccessListener {
-                Toast.makeText(this,"Data Uploaded Successfully",Toast.LENGTH_SHORT).show()
-            }
+        )
+        slipNumber.let { key ->
+            database.child("user").child(userId).child("CreatedSlips").child(key).setValue(newItem)
+                .addOnSuccessListener {
+                    Toast.makeText(this, "Data Uploaded Successfully", Toast.LENGTH_SHORT).show()
+                }
                 .addOnFailureListener {
-                    Toast.makeText(this,"Data Failed to Upload",Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this, "Data Failed to Upload", Toast.LENGTH_SHORT).show()
                 }
         }
 
     }
+
 
     private fun updateLable(myCalendar: Calendar?) {
        val myFormat = "dd/MM/yyyy"
@@ -128,4 +128,27 @@ class CreateSlipActivity : AppCompatActivity() {
             binding.dateEditText.text = sdf.format(myCalendar.time)
         }
     }
+    private fun updateNumber() {
+        val userId = auth.currentUser?.uid?:""
+        val database = FirebaseDatabase.getInstance().reference
+        val slipRef = database.child("user").child(userId).child("CreatedSlips")
+        slipRef.get().addOnSuccessListener { dataSnapshot ->
+            if (dataSnapshot.exists()) {
+                // There are already slips, find the highest slip number and increment it
+                val maxSlipNumber = dataSnapshot.children.mapNotNull {
+                    it.key?.toIntOrNull()
+                }.maxOrNull() ?: 0
+                slipNumber = (maxSlipNumber + 1).toString()  // Convert the slip number to string
+            } else {
+                // No slips present, start with slip number 1
+                slipNumber = "1"
+            }
+            // Update the text field only after slipNumber is determined
+            binding.numberText.text = slipNumber
+        }.addOnFailureListener {
+            // Handle any errors here, if necessary
+            Toast.makeText(this, "Failed to update slip number", Toast.LENGTH_SHORT).show()
+        }
+    }
+
 }
