@@ -84,15 +84,13 @@ class SignUpActivity : AppCompatActivity(){
             insets
         }
     }
-
-
     private fun createAccount(email: String, password: String) {
         auth.createUserWithEmailAndPassword(email,password).addOnCompleteListener {
             task->
             if(task.isSuccessful){
                 Toast.makeText(this,"Account Created Successfully",Toast.LENGTH_SHORT).show()
                 saveUserData()
-                startActivity(Intent(this,MainActivity::class.java))
+                startActivity(Intent(this,LogInActivity::class.java))
                 finish()
             }
             else{
@@ -110,7 +108,6 @@ class SignUpActivity : AppCompatActivity(){
         phoneNumber = binding.signUpPhone.text.toString()
         val userData = UserData(name, email, password,phoneNumber)
         val userId= FirebaseAuth.getInstance().currentUser!!.uid
-
         ///Save the data to the Firebase
         database.child("admin").child(userId).setValue(userData)
     }

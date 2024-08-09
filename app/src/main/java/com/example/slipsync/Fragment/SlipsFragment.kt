@@ -21,7 +21,6 @@ class SlipsFragment : Fragment() {
     private lateinit var database: FirebaseDatabase
     private lateinit var auth: FirebaseAuth
     private lateinit var binding: FragmentSlipsBinding
-    private lateinit var userId: String
     private lateinit var createdSlipAdapter: CreatedSlipsAdpater
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -46,8 +45,7 @@ class SlipsFragment : Fragment() {
 
 
     private fun retrieveSlipHistory() {
-        userId = auth.currentUser?.uid?:""
-        val slipRef = database.reference.child("user").child(userId).child("CreatedSlips")
+        val slipRef = database.reference.child("admin").child("CreatedSlips")
         val shortingQuery = slipRef.orderByChild("slipNumber")
         shortingQuery.addListenerForSingleValueEvent(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
@@ -71,13 +69,6 @@ class SlipsFragment : Fragment() {
 
 
     private fun setPreviousBuyItemRecyclerView(){
-//        val SlipItemName = mutableListOf<String>()
-//        val SlipName = mutableListOf<String>()
-//        val SlipItemAmount = mutableListOf<String>()
-//        for (i in 0 until listOfSlipItem.size) {
-//            listOfSlipItem[i].slipItem?.let { SlipItemName.add(it) }
-//            listOfSlipItem[i].slipName?.let { SlipName.add(it) }
-//            listOfSlipItem[i].slipAmount?.let { SlipItemAmount.add(it) }
             val rv = binding.slipsRecyclerView
             rv.layoutManager = LinearLayoutManager(requireContext())
             createdSlipAdapter = CreatedSlipsAdpater(listOfSlipItem,requireContext())

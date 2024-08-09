@@ -25,12 +25,14 @@ class LogInActivity : AppCompatActivity() {
     private val binding: ActivityLogInBinding by lazy {
         ActivityLogInBinding.inflate(layoutInflater)
     }
+
     private lateinit var email: String
     private lateinit var password: String
     private lateinit var auth: FirebaseAuth
     private lateinit var googleSignInClient: GoogleSignInClient
     private lateinit var database: DatabaseReference
     private lateinit var signInLauncher: ActivityResultLauncher<Intent>
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -85,13 +87,34 @@ class LogInActivity : AppCompatActivity() {
     }
 
     private fun verifyUserAccount(email: String, password: String) {
-        auth.signInWithEmailAndPassword(email, password).addOnCompleteListener { task ->
-            if (task.isSuccessful) {
-                Toast.makeText(this, "LogIn Successful", Toast.LENGTH_SHORT).show()
-                startActivity(Intent(this, MainActivity::class.java))
-                finish()
-            } else {
-                Toast.makeText(this, "Please Enter Correct Email and Password", Toast.LENGTH_SHORT).show()
+        if(email=="abhinav@gmail.com"||email=="vipingoyat@gmail.com") {
+            auth.signInWithEmailAndPassword(email, password).addOnCompleteListener { task ->
+                if (task.isSuccessful) {
+                    Toast.makeText(this, "LogIn Successful", Toast.LENGTH_SHORT).show()
+                    startActivity(Intent(this, MainActivity::class.java))
+                    finish()
+                } else {
+                    Toast.makeText(
+                        this,
+                        "Please Enter Correct Email and Password",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                }
+            }
+        }
+        else{
+            auth.signInWithEmailAndPassword(email, password).addOnCompleteListener { task ->
+                if (task.isSuccessful) {
+                    Toast.makeText(this, "LogIn Successful", Toast.LENGTH_SHORT).show()
+                    startActivity(Intent(this, CreateSlipActivity::class.java))
+                    finish()
+                } else {
+                    Toast.makeText(
+                        this,
+                        "Please Enter Correct Email and Password",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                }
             }
         }
     }

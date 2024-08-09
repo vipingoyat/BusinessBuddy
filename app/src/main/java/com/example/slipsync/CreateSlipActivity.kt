@@ -96,9 +96,9 @@ class CreateSlipActivity : AppCompatActivity() {
     }
 
     private fun uploadData() {
-        val userId = auth.currentUser?.uid?:""
         //Get Reference to the database
-        val database = FirebaseDatabase.getInstance().reference
+        val database = FirebaseDatabase.getInstance()
+        val ref = database.reference.child("admin")
         val newItem = CreatedSlipData(
             slipNumber = slipNumber,
             slipName = slipName,
@@ -109,7 +109,7 @@ class CreateSlipActivity : AppCompatActivity() {
             slipAmount = slipAmount
         )
         slipNumber.let { key ->
-            database.child("user").child(userId).child("CreatedSlips").child(key).setValue(newItem)
+            ref.child("CreatedSlips").child(key).setValue(newItem)
                 .addOnSuccessListener {
                     Toast.makeText(this, "Data Uploaded Successfully", Toast.LENGTH_SHORT).show()
                 }
