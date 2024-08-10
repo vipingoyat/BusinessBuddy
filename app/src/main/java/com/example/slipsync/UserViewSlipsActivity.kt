@@ -29,13 +29,25 @@ class UserViewSlipsActivity : AppCompatActivity() {
     private val binding: ActivityUserViewSlipsBinding by lazy{
         ActivityUserViewSlipsBinding.inflate(layoutInflater)
     }
-    private lateinit var userSlipAdapter: CreatedSlipsAdpater
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         auth = FirebaseAuth.getInstance()
         database = FirebaseDatabase.getInstance()
-//        currentUserName()
+
+        val database = FirebaseDatabase.getInstance().getReference("admin")
+        val userId = FirebaseAuth.getInstance().currentUser?.uid
+
+        userId?.let {
+            database.child(it).child("name").get().addOnSuccessListener { dataSnapshot ->
+                userName1 = dataSnapshot.getValue(String::class.java)
+                Log.d("UserName", "Name: $userName1")
+            }.addOnFailureListener { exception ->
+                Log.e("UserName", "Error: ${exception.message}")
+            }
+        }
+
+
         retrieveSlips()
         setContentView(binding.root)
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
@@ -46,59 +58,36 @@ class UserViewSlipsActivity : AppCompatActivity() {
     }
 
 
-//    private fun currentUserName() {
-//        val userId = FirebaseAuth.getInstance().currentUser!!.uid
-//        val database = FirebaseDatabase.getInstance().reference
-//
-//        database.child("admin").child(userId).addListenerForSingleValueEvent(object :
-//            ValueEventListener {
-//            override fun onDataChange(dataSnapshot: DataSnapshot) {
-//                if (dataSnapshot.exists()) {
-//                    // Assuming the user data is stored as a map
-//                    val userData = dataSnapshot.getValue(Map::class.java) as Map<String, Any>?
-//                    val userName = userData?.get("name") as String?
-//                    userName?.let {
-//                        // Do something with the user name
-//                        userName1 = userName
-//                        Log.d("User Name", it)
-//                    } ?: run {
-//                        Log.d("User Name", "User name not found.")
-//                    }
-//                } else {
-//                    Log.d("Data", "User not found.")
-//                }
-//            }
-//
-//            override fun onCancelled(databaseError: DatabaseError) {
-//                Log.e("Database Error", databaseError.message)
-//            }
-//        })
-//        retrieveSlips()
-//    }
-
     private fun retrieveSlips() {
         val slipRef = database.reference.child("admin").child("CreatedSlips")
         val sortingQuery = slipRef.orderByChild("date")
+
         sortingQuery.addListenerForSingleValueEvent(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
                 for (buySnapshot in snapshot.children) {
                     val slipItems = buySnapshot.getValue(SlipDetails::class.java)
                     slipItems?.let {
-                        listOfSlipItem.add(it)
+                        // Check if the current slip's name matches the userName1
+                        if (it.slipName == userName1) {
+                            listOfSlipItem.add(it)
+                        }
                     }
                 }
                 listOfSlipItem.reverse()
                 if (listOfSlipItem.isNotEmpty()) {
-                    //setup the recycler view
+                    // Setup the RecyclerView
                     setRecyclerView()
                 }
             }
 
             override fun onCancelled(error: DatabaseError) {
+                // Handle the error if needed
+                Log.e("RetrieveSlips", "Error: ${error.message}")
             }
         })
-
     }
+
+
     private fun setRecyclerView() {
         val rv = binding.yourSlipsRecyclerView
         rv.layoutManager = LinearLayoutManager(this)
