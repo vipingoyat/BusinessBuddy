@@ -87,12 +87,20 @@ class LogInActivity : AppCompatActivity() {
     }
 
     private fun verifyUserAccount(email: String, password: String) {
-        if(email=="abhinav@gmail.com"||email=="vipingoyat@gmail.com") {
+
             auth.signInWithEmailAndPassword(email, password).addOnCompleteListener { task ->
                 if (task.isSuccessful) {
-                    Toast.makeText(this, "LogIn Successful", Toast.LENGTH_SHORT).show()
-                    startActivity(Intent(this, MainActivity::class.java))
-                    finish()
+                    val user = "${auth.currentUser?.email}"
+                    if(user=="vipingoyat@gmail.com") {
+                        Toast.makeText(this, "LogIn Successful", Toast.LENGTH_SHORT).show()
+                        startActivity(Intent(this, MainActivity::class.java))
+                        finish()
+                    }
+                    else{
+                        Toast.makeText(this, "LogIn Successful", Toast.LENGTH_SHORT).show()
+                        startActivity(Intent(this, UserViewSlipsActivity::class.java))
+                        finish()
+                    }
                 } else {
                     Toast.makeText(
                         this,
@@ -101,22 +109,6 @@ class LogInActivity : AppCompatActivity() {
                     ).show()
                 }
             }
-        }
-        else{
-            auth.signInWithEmailAndPassword(email, password).addOnCompleteListener { task ->
-                if (task.isSuccessful) {
-                    Toast.makeText(this, "LogIn Successful", Toast.LENGTH_SHORT).show()
-                    startActivity(Intent(this, CreateSlipActivity::class.java))
-                    finish()
-                } else {
-                    Toast.makeText(
-                        this,
-                        "Please Enter Correct Email and Password",
-                        Toast.LENGTH_SHORT
-                    ).show()
-                }
-            }
-        }
     }
 
     private fun handleSignInResult(resultCode: Int, data: Intent?) {

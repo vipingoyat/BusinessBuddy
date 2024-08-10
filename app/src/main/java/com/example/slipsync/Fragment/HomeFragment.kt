@@ -10,8 +10,6 @@ import com.example.slipsync.CreateSlipActivity
 import com.example.slipsync.databinding.FragmentHomeBinding
 
 class HomeFragment : Fragment() {
-
-
     private lateinit var binding: FragmentHomeBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {

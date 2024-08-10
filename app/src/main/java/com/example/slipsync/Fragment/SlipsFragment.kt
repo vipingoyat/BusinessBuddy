@@ -1,6 +1,7 @@
 package com.example.slipsync.Fragment
 
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -39,15 +40,10 @@ class SlipsFragment : Fragment() {
         return binding.root
     }
 
-
-    companion object {
-    }
-
-
     private fun retrieveSlipHistory() {
         val slipRef = database.reference.child("admin").child("CreatedSlips")
-        val shortingQuery = slipRef.orderByChild("slipNumber")
-        shortingQuery.addListenerForSingleValueEvent(object : ValueEventListener {
+        val sortingQuery = slipRef.orderByChild("date")
+        sortingQuery.addListenerForSingleValueEvent(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
                 for (buySnapshot in snapshot.children) {
                     val slipItems = buySnapshot.getValue(SlipDetails::class.java)
@@ -58,7 +54,7 @@ class SlipsFragment : Fragment() {
                 listOfSlipItem.reverse()
                 if (listOfSlipItem.isNotEmpty()) {
                     //setup the recycler view
-                    setPreviousBuyItemRecyclerView()
+                    setRecyclerView()
                 }
             }
 
@@ -68,7 +64,7 @@ class SlipsFragment : Fragment() {
     }
 
 
-    private fun setPreviousBuyItemRecyclerView(){
+    private fun setRecyclerView(){
             val rv = binding.slipsRecyclerView
             rv.layoutManager = LinearLayoutManager(requireContext())
             createdSlipAdapter = CreatedSlipsAdpater(listOfSlipItem,requireContext())

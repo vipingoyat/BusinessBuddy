@@ -131,7 +131,7 @@ class CreateSlipActivity : AppCompatActivity() {
     private fun updateNumber() {
         val userId = auth.currentUser?.uid?:""
         val database = FirebaseDatabase.getInstance().reference
-        val slipRef = database.child("user").child(userId).child("CreatedSlips")
+        val slipRef = database.child("admin").child("CreatedSlips")
         slipRef.get().addOnSuccessListener { dataSnapshot ->
             if (dataSnapshot.exists()) {
                 // There are already slips, find the highest slip number and increment it
