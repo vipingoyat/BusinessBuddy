@@ -65,7 +65,7 @@ class CreatedSlipsAdpater(
             val slipItem = slipItems[position]
             binding.apply {
                 slipName.text = slipItem.slipName
-                itemName.text = slipItem.slipItem
+                dateText.text = slipItem.date
                 amountText.text = slipItem.slipAmount
             }
         }
