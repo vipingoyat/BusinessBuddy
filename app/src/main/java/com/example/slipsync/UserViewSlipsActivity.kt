@@ -67,8 +67,12 @@ class UserViewSlipsActivity : AppCompatActivity() {
                 for (buySnapshot in snapshot.children) {
                     val slipItems = buySnapshot.getValue(SlipDetails::class.java)
                     slipItems?.let {
-                        // Check if the current slip's name matches the userName1
-                        if (it.slipName == userName1) {
+                        // Normalize the strings by converting to lowercase and removing spaces
+                        val normalizedSlipName = it.slipName?.lowercase()?.replace("\\s".toRegex(), "")
+                        val normalizedUserName = userName1?.lowercase()?.replace("\\s".toRegex(), "")
+
+                        // Check if the normalized names match
+                        if (normalizedSlipName == normalizedUserName) {
                             listOfSlipItem.add(it)
                         }
                     }

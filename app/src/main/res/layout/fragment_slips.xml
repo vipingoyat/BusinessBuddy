@@ -15,7 +15,7 @@
             android:id="@+id/textView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="22dp"
+            android:layout_marginTop="38dp"
             android:fontFamily="@font/abhaya_libre"
             android:text="Slips"
             android:textColor="@color/white"

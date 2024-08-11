@@ -16,6 +16,7 @@ import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
+import com.google.android.gms.common.api.ApiException
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.GoogleAuthProvider
 import com.google.firebase.database.DatabaseReference
@@ -91,7 +92,7 @@ class LogInActivity : AppCompatActivity() {
             auth.signInWithEmailAndPassword(email, password).addOnCompleteListener { task ->
                 if (task.isSuccessful) {
                     val user = "${auth.currentUser?.email}"
-                    if(user=="vipingoyat@gmail.com") {
+                    if(user=="vipingoyat@gmail.com"||user=="abhinav@gmail.com") {
                         Toast.makeText(this, "LogIn Successful", Toast.LENGTH_SHORT).show()
                         startActivity(Intent(this, MainActivity::class.java))
                         finish()
@@ -114,25 +115,32 @@ class LogInActivity : AppCompatActivity() {
     private fun handleSignInResult(resultCode: Int, data: Intent?) {
         if (resultCode == Activity.RESULT_OK) {
             val task = GoogleSignIn.getSignedInAccountFromIntent(data)
-            if (task.isSuccessful) {
-                val account: GoogleSignInAccount? = task.result
-                val credential = GoogleAuthProvider.getCredential(account?.idToken, null)
-                auth.signInWithCredential(credential).addOnCompleteListener { authtask ->
-                    if (authtask.isSuccessful) {
-                        Toast.makeText(this, "Successful SignIn with Google 🥳", Toast.LENGTH_SHORT).show()
-                        startActivity(Intent(this, MainActivity::class.java))
-                        finish()
-                    } else {
-                        Toast.makeText(this, "Google SignIn Failed 🥲", Toast.LENGTH_SHORT).show()
-                        Log.d("Account1", "createAccount: Failure", task.exception)
+            try {
+                val account: GoogleSignInAccount? = task.getResult(ApiException::class.java)
+                if (account != null) {
+                    val credential = GoogleAuthProvider.getCredential(account.idToken, null)
+                    auth.signInWithCredential(credential).addOnCompleteListener { authtask ->
+                        if (authtask.isSuccessful) {
+                            Toast.makeText(this, "Successful SignIn with Google 🥳", Toast.LENGTH_SHORT).show()
+                            startActivity(Intent(this, MainActivity::class.java))
+                            finish()
+                        } else {
+                            Toast.makeText(this, "Google SignIn Failed 🥲", Toast.LENGTH_SHORT).show()
+                            Log.d("Account1", "createAccount: Failure", authtask.exception)
+                        }
                     }
+                } else {
+                    Toast.makeText(this, "Google SignIn Failed: Account is null", Toast.LENGTH_SHORT).show()
+                    Log.d("GoogleSignIn", "Google signIn failed: Account is null")
                 }
-            } else {
-                Toast.makeText(this, "Google SignIn Failed", Toast.LENGTH_SHORT).show()
-                Log.d("GoogleSignIn", "Google signIn failed", task.exception)
+            } catch (e: ApiException) {
+                Toast.makeText(this, "Google SignIn Failed: ${e.localizedMessage}", Toast.LENGTH_SHORT).show()
+                Log.d("GoogleSignIn", "Google signIn failed", e)
             }
         } else {
-            Toast.makeText(this, "Google SignIn Failed", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, "Google SignIn Canceled", Toast.LENGTH_SHORT).show()
+            Log.d("GoogleSignIn", "Google signIn canceled")
         }
     }
+
 }
